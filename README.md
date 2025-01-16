@@ -16,6 +16,7 @@
 
 
 ## Usage
+</br>
 
 ```zig
 
@@ -44,7 +45,9 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 
 ```
 </br>
-#Outils
+## Outils
+</br>
+
 |Function               | Description                              | Pub |
 |-----------------------|------------------------------------------|-----|
 |isLeapYear             | is Leap Year                             |  .  |
@@ -59,7 +62,9 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 
 </br>
 
-#Dtime
+##Dtime
+</br>
+
 |Function               | Description                              | Pub |
 |-----------------------|------------------------------------------|-----|
 |HardTime               | Change of field attribute                |  .  |
@@ -70,7 +75,7 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |stringTime             | Date-time format string                  |  x  |
 </br>
 
-#Date
+##Date
 </br>
 
 |Function    | Description                                          | Pub |
@@ -105,7 +110,7 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |shiftYears  | Copy of the DATE shifted by the given number of Year |  x  |
 </br>
 
-#Translate
+##Translate
 </br>
 
 |Function    | Description                                          | Pub |
@@ -145,7 +150,7 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 ![](assets/20250115_012345_Testdate.png)
 
 </br>
-#Notes
+##Notes
 </br>
 
 thank :  [![actions](frmdstryr/](https://github.com/frmdstryr/zig-datetime) 
