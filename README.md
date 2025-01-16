@@ -1,33 +1,33 @@
 # Zig Datetime
 
+thank
+
+[![actions](frmdstryr/](https://github.com/frmdstryr/zig-datetime)
+
 
 
 ## Table of Contents
 
 - [Usage](#usage)
-  
-- [Outils](#outils)
-  
-- [Date-time](#dtime)
-  
-- [Date](#date)
-  
-- [Timezone](#dimezone)
-  
-- [Translate](#dranslate)
 
-- [Notes](#notes)
+    - [Outils](#outils)
 
-- [Avancement](#avancement)
+    - [DateTime](#datetime)
 
+    - [Date](#date)
+
+    - [Timezone](#timezone)
+
+    - [Notes](#notes)
+
+    - [Avancement](#avancement)
 
 
 ## Usage
-</br>
 
 ```zig
 
-pub const Dte = @import("datetime").Date;   // work date Y M D
+pub const Dte = @import("datetime").Date;i  // work date Y M D
 
 pub const Dtm = @import("datetime").DTime;  // UTC chronolog
 
@@ -40,20 +40,19 @@ const next_year = date.shiftDays(7);
 assert(next_year.year == 2020);
 assert(next_year.month == 1);
 assert(next_year.day == 1);
-or
-const datuday= try. nowDate(tmz.Europe.Paris);  // get nanoTimestanp add timezones = YMD of day
+const datuday= try. now(tmz.Europe.Paris);  // get milliTimestanp add timezones = YMD of day
   
-// In UTC  nanoTimestamp
-const nstamp = Dtm.nowTime(tmz.Europe.Paris);
-std.debug.print("formaChrono UTC : {s}\n",.{nstamp.ChronoTime(allocator) catch "0" });
-// Chrono UTC Europe.Paris : 2025-01-15T:22:56:28N:098450344Z:060
-std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 });
-// Chrono NUM Europe.Paris : 20250115225628098450344060
+// In UTC  milliTimestamp
+const now = Dtm.now(tmz.Europe.Paris);
+std.debug.print("formaChrono UTC : {s}\n",.{c.ChronoTime(allocator) catch "0" });
+// formaChrono UTC : 2025-01-14T:11:25:37N:0491Z:000
+std.debug.print("formaChrono NUM : {d}\n",.{c.ChronoNum(allocator) catch 0 });
+// formaChrono NUM : 202501141125370491000
 
 ```
 </br>
+
 ## Outils
-</br>
 
 |Function               | Description                              | Pub |
 |-----------------------|------------------------------------------|-----|
@@ -61,16 +60,15 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |dayInYear              | Number of days in the year               |  .  |
 |daysInMonth            | Number of days in the month              |  .  |
 |daysBeforeYear         | Number of days before Jan 1st of year    |  .  |
-|daysBeforeMonth        | Number of days of the month precedent    |  .  |
+|daysBeforeMonth        | Number of days   of the month precedent  |  .  |
 |ldaysBeforeFirstMonday | Calculate the number of days of the first|  .  |
 |                       | Monday for week 1 ISO calendar           |     |
 |                       | for the given year since 01-Jan-0001     |     |
 |ymd2ord                | Number of days since 01-Jan-0001         |     |
 
-</br>
 
-##Dtime
-</br>
+## DateTime
+
 
 |Function               | Description                              | Pub |
 |-----------------------|------------------------------------------|-----|
@@ -80,19 +78,18 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |Timestamp              | Date time reverse  timestamp             |  x  |
 |Timestamp              | Timestamp date into time-zone            |  x  |
 |stringTime             | Date-time format string                  |  x  |
-</br>
 
-##Date
-</br>
+
+## Date
 
 |Function    | Description                                          | Pub |
 |------------|------------------------------------------------------|-----|
-|create      | Create and validate the date    create DATE          |  x  |
+|create      | Create and validate the date                         |  x  |
 |copy        | Return a copy of the date                            |  x  |
 |fromOrdinal | Create a Date since 01-Jan-0001                      |  .  |
 |toOrdinal   | Return proleptic Gregorian ordinal                   |  .  |
 |HardDate    | Change of field attribute                            |  .  |
-|nowDate     | Returns today's date into time-zone  create DATE     |  x  |
+|nowDate     | Returns today's date into time-zone                  |  x  |
 |isoCalendar | Convert to an ISO Calendar date YWS                  |  x  |
 |eql         | comparaison                                          |  x  |
 |comp        | comparaison                                          |  x  |
@@ -100,12 +97,12 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |gte         | comparaison                                          |  x  |
 |lt          | comparaison                                          |  x  |
 |lte         | comparaison                                          |  x  |
-|parseIso    | Parse date in format YYYY-MM-DD  create DATE         |  x  |
-|parseFR     | Parse date in format DD-MM-YYYY  create DATE         |  x  |
-|parseUS     | Parse date in format MM-DD-YYYY  create DATE         |  x  |
-|stringIso   | Return date in ISO format YYYY-MM-DD                 |  x  |
-|stringFR    | Return date in FR  format DD-MM-YYYY                 |  x  |
-|stringUS    | Return date in US  format MM-DD-YYYY                 |  x  |
+|parseIso    | Parse date in format YYYY-MM-DD                      |  x  |
+|parseFR     | Parse date in format YYYY-MM-DD                      |  x  |
+|parseUS     | Parse date in format YYYY-MM-DD                      |  x  |
+|formatIso   | Return date in ISO format YYYY-MM-DD                 |  x  |
+|formatFR    | Return date in ISO format DD-MM-YYYY                 |  x  |
+|formatUS    | Return date in ISO format MM-DD-YYYY                 |  x  |
 |dayOfYear   | Return day of year starting with 1                   |  x  |
 |dayOfWeek   | Day of week starting with Monday =1 and Sunday =7    |  x  |
 |weekday     | Day of week starting with Monday =1 and Sunday =6    |  x  |
@@ -113,12 +110,10 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |getYear     | get year                                             |  x  |
 |getMonth    | get Month                                            |  x  |
 |getWeek     | get Week                                             |  x  |
-|shiftDays   | Copy of the DATE shifted by the given number of days |  x  |
-|shiftYears  | Copy of the DATE shifted by the given number of Year |  x  |
-</br>
+|shiftDays   | Copy of the date shifted by the given number of days |  x  |
+|shiftYears  | Copy of the date shifted by the given number of Year |  x  |
 
-##Translate
-</br>
+## Timezone
 
 |Function    | Description                                          | Pub |
 |------------|------------------------------------------------------|-----|
@@ -127,59 +122,6 @@ std.debug.print("formaChrono NUM : {d}\n",.{nstamp.ChronoNum(allocator) catch 0 
 |abbrevMonth | Return the abbreviation name of the Month            |  x  |
 |abbrevDay   | Return the abbreviation name of the day              |  x  |
 
-</br>
+## Avancement
 
-```
-   pub const Idiom = enum(u4) {
-        en, // English
-        fr, // French
-        sp, // Spanish
-        po, // Portuguese
-        it, // Italian
-        de, // German
-        ne, // Netherlands
-        fi, // finland
-        gr, // Greece
-        so, // Slovakia
-        lu, // Lutuania
-        es, // Estonia
-        pl, // Poland
-        ro, // Romania
-        cn, // china
-        co, // Korean
-        jp, // Japan
-        ru, // Russia
-    };
-```
-
-</br>
-
-![](assets/20250115_012345_Testdate.png)
-
-</br>
-##Notes
-</br>
-
-thank :  [![actions](frmdstryr/](https://github.com/frmdstryr/zig-datetime) 
-
-I needed a chronolog and a date of the day and date extended when other English, so I adapted the code to my needs 
-
-
-</br>
-The datetime module is divided into 3 parts,</br>
-TIME : corresponds to the timestamp for a chronolog in milliseconds.</br>
-DATE : corresponds to date management YMD</br>
-TIMEZONE: corresponds to the time offset from UTC</br>
-</br>
-two ways to create a date :</br>
-Create date free YMD format </br>
-nowDate, which generates a current date by itself, incorporating the time zone </br>
-
-</br>
-</br>
-</br>
-</br>
-#Avancement
-</br>
-→ 2025-01-14 22:45<BR/>
-setting up the project date 
+-2025-01-16 start projet date-time
