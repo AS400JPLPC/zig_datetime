@@ -52,6 +52,25 @@ std.debug.print("formaChrono NUM : {d}\n",.{c.ChronoNum(allocator) catch 0 });
 ```
 </br>
 
+## Notes
+
+This is a standard date processing library, plus a feature for SQL that supports a NULL zone.</br>
+See examples in the zig_sql project.</br>
+</br>
+In SQL, there are two ways of handling dates:</br>
+“NULL”, e.g. invoicing not processed.</br>
+</br>
+“0000-00-00” is not a valid date, it's just an indication, you shouldn't use it in your SQL.</br>
+</br>
+The date becomes invalid, for example when a record is “deinit”. </br>
+Dte.DATE.dateOff(&dfacture), becomes “0000-00-00” its status changes to false.</br>
+</br>
+Use isValid() ;</br>
+</br>
+
+![Testdate](assets/20250116_012345_Testdate.png)
+</br>
+
 ## Outils
 
 |Function               | Description                              | Pub |
@@ -85,6 +104,7 @@ std.debug.print("formaChrono NUM : {d}\n",.{c.ChronoNum(allocator) catch 0 });
 |Function    | Description                                          | Pub |
 |------------|------------------------------------------------------|-----|
 |create      | Create and validate the date                         |  x  |
+|dateOff     | Change status OFF for work SQL = null                |  x  |
 |copy        | Return a copy of the date                            |  x  |
 |fromOrdinal | Create a Date since 01-Jan-0001                      |  .  |
 |toOrdinal   | Return proleptic Gregorian ordinal                   |  .  |
