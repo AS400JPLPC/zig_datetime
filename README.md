@@ -5,12 +5,19 @@
 ## Table of Contents
 
 - [Usage](#usage)
-  - [Outils](#outils)
-  - [Date-time](#dtime)
-  - [Date](#date)
-  - [Timezone](#dimezone)
-  - [Translate](#dranslate)
+  
+- [Outils](#outils)
+  
+- [Date-time](#dtime)
+  
+- [Date](#date)
+  
+- [Timezone](#dimezone)
+  
+- [Translate](#dranslate)
+
 - [Notes](#notes)
+
 - [Avancement](#avancement)
 
 
