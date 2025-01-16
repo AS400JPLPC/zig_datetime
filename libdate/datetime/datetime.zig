@@ -161,7 +161,7 @@ pub const DTime = struct {
 
     // Date initialization in UTC ONLY time-stamp format.
     // use is made of a chronolog
-    pub fn nowUTC() !DTime {
+    pub fn nowUTC() DTime {
         const TS: u128 = @abs(time.nanoTimestamp());
         var th: u64 = @intCast(@mod(TS, time.ns_per_day));
           
@@ -192,8 +192,8 @@ pub const DTime = struct {
 
         
         const chronoHardFMT :[]const u8 = "{:0>4}{:0>2}{:0>2}{:0>2}{:0>2}{:0>2}{:0>9}{:0>3}";
-        const  r : []const u8 = try  std.fmt.allocPrint(allocDateTime, chronoHardFMT,
-            .{ year, month, day , hr, min,sec,ns, 0 }) ;
+        const  r : []const u8 =  std.fmt.allocPrint(allocDateTime, chronoHardFMT,
+            .{ year, month, day , hr, min,sec,ns, 0 })  catch unreachable;
 
         const tm = hardTime(r) ;
         defer allocDateTime.free(r);
@@ -233,7 +233,7 @@ pub const DTime = struct {
 
 
     // Timestamp date into time-zone
-    pub fn nowTime(mz :tmz.Timezone) !DTime {
+    pub fn nowTime(mz :tmz.Timezone) DTime {
         //timezoneem  Europe.Paris = 60 minutes in nanoseconds
         const TS : u128 = @intCast(time.nanoTimestamp() + (mz.offset * @as(i64,time.ns_per_min))) ;
 
@@ -266,8 +266,8 @@ pub const DTime = struct {
 
         
         const chronoHardFMT :[]const u8 = "{:0>4}{:0>2}{:0>2}{:0>2}{:0>2}{:0>2}{:0>9}{:0>3}";
-        const  r : []const u8 = try  std.fmt.allocPrint(allocDateTime, chronoHardFMT,
-            .{ year, month, day , hr, min,sec,ns, mz.offset }) ;
+        const  r : []const u8 = std.fmt.allocPrint(allocDateTime, chronoHardFMT,
+            .{ year, month, day , hr, min,sec,ns, mz.offset }) catch unreachable;
 
         
         const tm = hardTime(r) ;
@@ -280,17 +280,19 @@ pub const DTime = struct {
 
     const  chronoTimeFMT :[]const u8 = "{:0>4}-{:0>2}-{:0>2}T:{:0>2}:{:0>2}:{:0>2}N:{:0>9}Z:{:0>3}";
 
-    pub fn stringTime(self: DTime, allocat: AllocDate) ![]const u8 {
-        return try std.fmt.allocPrint(allocat, chronoTimeFMT,
-            .{ self.year, self.month, self.day, self.hour, self.minute,self.second,self.nanosecond,self.tmz });
+    pub fn stringTime(self: DTime, allocat: AllocDate) []const u8 {
+        return std.fmt.allocPrint(allocat, chronoTimeFMT,
+            .{ self.year, self.month, self.day, self.hour, self.minute,self.second,self.nanosecond,self.tmz })
+            catch unreachable;
     }
 
     const chronoNumFMT = "{:0>4}{:0>2}{:0>2}{:0>2}{:0>2}{:0>2}{:0>9}{:0>3}";
 
-    pub fn numTime(self: DTime, allocat: AllocDate) !u128 {
-        const  r : []const u8 = try std.fmt.allocPrint(allocat, chronoNumFMT,
-            .{ self.year, self.month, self.day, self.hour, self.minute,self.second,self.nanosecond,self.tmz });
-        const i :u128 = try std.fmt.parseInt(u128,r,10);
+    pub fn numTime(self: DTime, allocat: AllocDate) u128 {
+        const  r : []const u8 = std.fmt.allocPrint(allocat, chronoNumFMT,
+            .{ self.year, self.month, self.day, self.hour, self.minute,self.second,self.nanosecond,self.tmz })
+            catch unreachable;
+        const i :u128 =  std.fmt.parseInt(u128,r,10) catch unreachable;
         return i;
     }
 
@@ -477,7 +479,7 @@ pub const Date = struct {
     }
 
     // Returns today's date into time-zone
-    pub fn nowDate(mz : tmz.Timezone) !Date {
+    pub fn nowDate(mz : tmz.Timezone) Date {
 
         // Ajouter ex; from paris 60  minutes en nanosecond
         const TS : u128 = @intCast(time.nanoTimestamp() + (mz.offset * @as(i64,time.ns_per_min))); 
@@ -500,8 +502,8 @@ pub const Date = struct {
 
         
         const chronoHardFMT :[]const u8 = "{:0>4}{:0>2}{:0>2}";
-        const  r : []const u8 = try  std.fmt.allocPrint(allocDateTime, chronoHardFMT,
-            .{ year, month, day }) ;
+        const  r : []const u8 = std.fmt.allocPrint(allocDateTime, chronoHardFMT,
+            .{ year, month, day }) catch unreachable;
         defer allocDateTime.free(r);
         return hardDate(r);
  
@@ -602,20 +604,23 @@ pub const Date = struct {
 
     // Return date in ISO format YYYY-MM-DD
     const ISO_DATE_FMT = "{:0>4}-{:0>2}-{:0>2}";
-    pub fn stringIso(self: Date, allocator: AllocDate) ![]const u8 {
-        return std.fmt.allocPrint(allocator, ISO_DATE_FMT, .{ self.year, self.month, self.day });
+    pub fn stringIso(self: Date, allocator: AllocDate) []const u8 {
+        return std.fmt.allocPrint(allocator, ISO_DATE_FMT,
+            .{ self.year, self.month, self.day }) catch unreachable;
     }
 
    // Return date in FR format DD/MM/YYYY
     const FR_DATE_FMT = "{:0>2}/{:0>2}/{:0>4}";
-    pub fn stringFR(self: Date, allocator: AllocDate) ![]const u8 {
-        return std.fmt.allocPrint(allocator, FR_DATE_FMT, .{ self.day, self.month, self.year }) ;
+    pub fn stringFR(self: Date, allocator: AllocDate) []const u8 {
+        return std.fmt.allocPrint(allocator, FR_DATE_FMT,
+            .{ self.day, self.month, self.year }) catch unreachable;
     }
 
    // Return date in FR format MM/DD/YYYY
     const US_DATE_FMT = "{:0>2}/{:0>2}/{:0>4}";
-    pub fn stringUS(self: Date, allocator: AllocDate) ![]const u8 {
-        return std.fmt.allocPrint(allocator, US_DATE_FMT, .{ self.month, self.day, self.year });
+    pub fn stringUS(self: Date, allocator: AllocDate) []const u8 {
+        return std.fmt.allocPrint(allocator, US_DATE_FMT,
+            .{ self.month, self.day, self.year }) catch unreachable;
     }
 
     // ------------------------------------------------------------------------
@@ -685,6 +690,36 @@ pub const Date = struct {
         return self.shift(Delta{ .days = days });
     }
 
+   // Return a copy of the date swistch by the given number of month
+   pub fn switchMonths(self: Date, month: i32) Date {
+        var days: i32 = 0;
+        var d : i32 = @intCast(self.day);
+        var n  : i32 = month ;
+        var mm : i32 = month;
+        if( month < 0) { n *= - 1; mm *= - 1; d *= -1; }
+        var dt = self;
+        while(n > 0) :( n -= 1) {
+        if( mm > 12 ) mm -= 12 * n ;
+            if ( month > 0 ) {
+                d += 1;
+                d *= -1;
+                dt =shiftDays(dt, d);
+                days = @intCast(daysInMonth(dt.year, @intCast(mm)));
+                dt =shiftDays(dt, days);
+                dt =shiftDays(dt, self.day);
+            }
+            else {
+                dt =shiftDays(dt, d);
+                days = @intCast(daysInMonth(dt.year, @intCast(mm)));
+                days -= 1;  days *= -1 ;
+                dt =shiftDays(dt, days);
+                dt =shiftDays(dt, self.day);
+            }
+        }
+        return  dt;
+    }
+
+    
     // Return a copy of the date shifted by the given number of years
     pub fn shiftYears(self: Date, years: i16) Date {
         return self.shift(Delta{ .years = years });
@@ -744,14 +779,14 @@ pub const Date = struct {
 
    // Return date extended
     const DATE_FMT_EXT= "{s} {:0>2} {s} {:0>4}";
-    pub fn dateExt(self: Date, allocator: AllocDate, lng: Idiom) ![]u8 {
+    pub fn dateExt(self: Date, allocator: AllocDate, lng: Idiom) []u8 {
         return std.fmt.allocPrint(allocator, DATE_FMT_EXT,
-            .{ self.nameDay(lng), self.day, self.nameMonth(lng), self.year });
+            .{ self.nameDay(lng), self.day, self.nameMonth(lng), self.year }) catch unreachable;
     }
     const DATE_FMT_ABR= "{s}. {:0>2} {s}. {:0>4}";
-    pub fn dateAbr(self: Date, allocator: AllocDate, lng: Idiom) ![]u8 {
+    pub fn dateAbr(self: Date, allocator: AllocDate, lng: Idiom) []u8 {
         return std.fmt.allocPrint(allocator, DATE_FMT_ABR,
-            .{ self.abbrevDay(lng), self.day, self.abbrevMonth(lng), self.year });
+            .{ self.abbrevDay(lng), self.day, self.abbrevMonth(lng), self.year }) catch unreachable;
     }
 
      pub const Idiom = enum(u5) {

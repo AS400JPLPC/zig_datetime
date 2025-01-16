@@ -112,6 +112,7 @@ std.debug.print("formaChrono NUM : {d}\n",.{c.ChronoNum(allocator) catch 0 });
 |getWeek     | get Week                                             |  x  |
 |shiftDays   | Copy of the date shifted by the given number of days |  x  |
 |shiftYears  | Copy of the date shifted by the given number of Year |  x  |
+|switchMonths| Copy of the date switch by the given  number of Month|  x  |
 
 ## Timezone
 
@@ -124,4 +125,6 @@ std.debug.print("formaChrono NUM : {d}\n",.{c.ChronoNum(allocator) catch 0 });
 
 ## Avancement
 
--2025-01-16 start projet date-time
+-2025-01-16 06:30 start projet date-time </br></br>
+-2025-01-16 15:01 add function switchMonths </br></br>
+
