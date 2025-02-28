@@ -58,6 +58,8 @@ envZIG="2"
 PROJECT="ZDATE"
 LIBPROJECT="/home/soleil/Zdate/"
 LIBDATE="/home/soleil/Zdate/libdate/"
+LIBLMDB="/home/soleil/Zdate/liblmdb/"
+LIBTMZN="/home/soleil/Zdate/create_timezones"
 choix=""
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -67,22 +69,20 @@ do
     f_cls
     f_dsplyPos  1  24 $faGras$fcJaune 'Project: '$faGras$fcCyan$PROJECT
 
-    f_dsplyPos  2  24 $faGras$fcJaune '------------compile cpp-----------------'
-
-    f_dsplyPos  3  20 $faGras$fcRouge ' 1.'; f_dsplyPos  5  24 $faGras$fcGreen 'P???'
-
     f_dsplyPos  4  24 $faGras$fcJaune '------------compile Zig-----------------'
 
     f_dsplyPos  6  20 $faGras$fcRouge' 10'; f_dsplyPos  6  24 $faGras$fcGreen 'Testdate'
+    f_dsplyPos  8  20 $faGras$fcRouge' 12'; f_dsplyPos  8  24 $faGras$fcGreen 'Testzone'
 
+    f_dsplyPos 14  24 $faGras$fcJaune '----------------------------------------'
 
-    f_dsplyPos 16  24 $faGras$fcJaune '----------------------------------------'
+    f_dsplyPos 15  20 $faGras$fcRouge'33.'; f_dsplyPos 15  24 $faGras$fcGreen 'Debug codelldb'
 
-    f_dsplyPos 17  20 $faGras$fcRouge'33.'; f_dsplyPos 17  24 $faGras$fcGreen 'Debug codelldb'
+    f_dsplyPos 17  20 $faGras$fcRouge'44.'; f_dsplyPos 17  24 $faGras$fcCyan  'enScript Printer'
 
-    f_dsplyPos 19  20 $faGras$fcRouge'44.'; f_dsplyPos 19  24 $faGras$fcCyan  'enScript Printer'
-
-    f_dsplyPos 21  20 $faGras$fcRouge'50'; f_dsplyPos  21  24 $faGras$fcCyan  'Edit my libdate'
+    f_dsplyPos 19  20 $faGras$fcRouge'50'; f_dsplyPos  19  24 $faGras$fcCyan  'Edit my libdate'
+    f_dsplyPos 20  20 $faGras$fcRouge'51'; f_dsplyPos  20  24 $faGras$fcCyan  'Edit my liblmdb'
+    f_dsplyPos 21  20 $faGras$fcRouge'52'; f_dsplyPos  21  24 $faGras$fcCyan  'Edit create_timezones'
 
     f_dsplyPos 23  20 $faGras$fcRouge'60.'; f_dsplyPos 23  24 $faGras$fcCyan  'Edit my project'
 
@@ -116,6 +116,11 @@ do
             /home/soleil/.Terminal/dispatch.sh $envZIG $LIBPROJECT   "Testdate"
         ;;
 
+#Test"
+        12)
+            /home/soleil/.Terminal/dispatch.sh $envZIG $LIBPROJECT   "Testzone"
+        ;;
+
 #debug
         33)
             /home/soleil/.Terminal/debugZig.sh $PROJECT
@@ -132,6 +137,22 @@ do
             #sleep 2
             #break
         ;;
+
+#liblmdb
+        51)
+            /home/soleil/.Terminal/myProject.sh  $PROJECT $LIBLMDB
+            #sleep 2
+            #break
+        ;;
+
+#create_timezones
+        52)
+            /home/soleil/.Terminal/myProject.sh  $PROJECT $LIBTMZN
+            #sleep 2
+            #break
+        ;;
+
+
 #project
         60)
             /home/soleil/.Terminal/myProject.sh  $PROJECT $LIBPROJECT"src-zig"

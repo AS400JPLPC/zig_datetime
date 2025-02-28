@@ -67,23 +67,37 @@ Dte.DATE.dateOff(&dfacture), becomes “0000-00-00” its status changes to fals
 </br>
 Use isValid() ;</br>
 </br>
+Normally, if you don't fiddle with the date apart from retrieving twisted text,</br>
+there'll be no error, catch unreachable instead of try</br>
+</br>
 
-![Testdate](assets/20250116_012345_Testdate.png)
+To regenerate the timezone.zig file, run gensrc.sh from the create_timezones folder.</br>
+this file is generated from timedatectl </br>
+</br>
+
+To be dynamic, an LMDB file is generated at each reboot only if the readTimezone() function is used.</br>
+Time-zone processing in source file ./liboffset/timeoffset.zig</br>
+</br>
+searchWeek” is a function that determines the number of weeks, the last week and the start of week 01.</br>
+</br>
+
+![](assets/20250116_012345_Testdate.png)
+
+
+![](assets/20250116_012345_Testzone.png)
+
 </br>
 
 ## Outils
 
 |Function               | Description                              | Pub |
 |-----------------------|------------------------------------------|-----|
-|isLeapYear             | is Leap Year                             |  .  |
+|checkLeapYear          | is Leap Year                             |  .  |
 |dayInYear              | Number of days in the year               |  .  |
 |daysInMonth            | Number of days in the month              |  .  |
 |daysBeforeYear         | Number of days before Jan 1st of year    |  .  |
 |daysBeforeMonth        | Number of days   of the month precedent  |  .  |
-|ldaysBeforeFirstMonday | Calculate the number of days of the first|  .  |
-|                       | Monday for week 1 ISO calendar           |     |
-|                       | for the given year since 01-Jan-0001     |     |
-|ymd2ord                | Number of days since 01-Jan-0001         |     |
+|isFile                 | openfileAbsolute lmdb                    |  .  |
 
 
 ## DateTime
@@ -95,56 +109,76 @@ Use isValid() ;</br>
 |nowUTC                 | Timestamp date in UTC ONLY               |  x  |
 |nowTime                | Timestamp date into Time-zone            |  x  |
 |Timestamp              | Date time reverse  timestamp             |  x  |
-|Timestamp              | Timestamp date into time-zone            |  x  |
+|NumTime                | Timestamp date into time-zone            |  x  |
 |stringTime             | Date-time format string                  |  x  |
 
 
 ## Date
 
-|Function    | Description                                          | Pub |
-|------------|------------------------------------------------------|-----|
-|create      | Create and validate the date                         |  x  |
-|dateOff     | Change status OFF for work SQL = null                |  x  |
-|copy        | Return a copy of the date                            |  x  |
-|fromOrdinal | Create a Date since 01-Jan-0001                      |  .  |
-|toOrdinal   | Return proleptic Gregorian ordinal                   |  .  |
-|HardDate    | Change of field attribute                            |  .  |
-|nowDate     | Returns today's date into time-zone                  |  x  |
-|isoCalendar | Convert to an ISO Calendar date YWS                  |  x  |
-|eql         | comparaison                                          |  x  |
-|comp        | comparaison                                          |  x  |
-|gt          | comparaison                                          |  x  |
-|gte         | comparaison                                          |  x  |
-|lt          | comparaison                                          |  x  |
-|lte         | comparaison                                          |  x  |
-|parseIso    | Parse date in format YYYY-MM-DD                      |  x  |
-|parseFR     | Parse date in format YYYY-MM-DD                      |  x  |
-|parseUS     | Parse date in format YYYY-MM-DD                      |  x  |
-|formatIso   | Return date in ISO format YYYY-MM-DD                 |  x  |
-|formatFR    | Return date in ISO format DD-MM-YYYY                 |  x  |
-|formatUS    | Return date in ISO format MM-DD-YYYY                 |  x  |
-|dayOfYear   | Return day of year starting with 1                   |  x  |
-|dayOfWeek   | Day of week starting with Monday =1 and Sunday =7    |  x  |
-|weekday     | Day of week starting with Monday =1 and Sunday =6    |  x  |
-|dayNum      | Day of week starting with Monday =1 and Sunday =7    |  x  |
-|getYear     | get year                                             |  x  |
-|getMonth    | get Month                                            |  x  |
-|getWeek     | get Week                                             |  x  |
-|shiftDays   | Copy of the date shifted by the given number of days |  x  |
-|shiftYears  | Copy of the date shifted by the given number of Year |  x  |
-|switchMonths| Copy of the date switch by the given  number of Month|  x  |
+|Function    | Description                                          | Pub |Panic|
+|------------|------------------------------------------------------|-----|-----|
+|create      | Create and validate the date                         |  x  |  ?  |
+|dateOff     | Change status OFF for work SQL = null                |  x  |     |
+[isBad       | Consistency test of the date                         |  .  [     |
+|copy        | Return a copy of the date                            |  x  |  x  |
+|HardDate    | Change of field attribute                            |  .  |     |
+|nowDate     | Returns today's date into time-zone   readTimezone() |  x  |     |
+|eql         | comparaison                                          |  x  |     |
+|comp        | comparaison                                          |  x  |     |
+|gt          | comparaison                                          |  x  |     |
+|gte         | comparaison                                          |  x  |     |
+|lt          | comparaison                                          |  x  |     |
+|lte         | comparaison                                          |  x  |     |
+|parseIso    | Parse date in format YYYY-MM-DD                      |  x  |  x  |
+|parseFR     | Parse date in format YYYY-MM-DD                      |  x  |  x  |
+|parseUS     | Parse date in format YYYY-MM-DD                      |  x  |  x  |
+|formatIso   | Return date in ISO format YYYY-MM-DD                 |  .  |     |
+|formatFR    | Return date in ISO format DD-MM-YYYY                 |  .  |     |
+|formatUS    | Return date in ISO format MM-DD-YYYY                 |  .  |     |
+|getYear     | get year                                             |  x  |     |
+|getMonth    | get Month                                            |  x  |     |
+|getDay      | get Day                                              |  x  |     |
+|getWeek     | get Week                                             |  x  |     |
+|getWeekDay  | get WeekDay                                          |  x  |     |
+|restOfdays  | get restOfdays                                       |  x  |     |
+|isWeekend   | Test Week end                                        |  x  |     |
+|isLeapYear  | is Leap Year                                         |  x  |     |
+|dayNum      | number of days                                       |  .  |     |
+|daysMore    | Add days                                             |  x  |     |
+|daysLess    | Sub days                                             |  x  |     |
+|yearsMore   | Add years                                            |  x  |     |
+|yearsLess   | Sub years                                            |  x  |     |
+|quantieme   | Returns the day number in the year                   |  x  |     |
+|dayZeller   | Calculation of day number with Sunday = 01...        |  .  |     |
+|searchWeek  | Calculation week                                     |  .  |     |
+|fromOrdinal | Create a Date since 01-Jan-0001                      |  .  |  x  |
+|toOrdinal   | Return proleptic Gregorian ordinal                   |  .  |     |
+
 
 ## Timezone
 
-|Function    | Description                                          | Pub |
-|------------|------------------------------------------------------|-----|
-|abbrevDay   | Return the abbreviation name of the day              |  x  |
-|nameDay     | Return the of the day                                |  x  |
-|abbrevMonth | Return the abbreviation name of the Month            |  x  |
-|abbrevDay   | Return the abbreviation name of the day              |  x  |
+|Function    | Description                                          | Pub |Panic|
+|------------|------------------------------------------------------|-----|-----|
+|abbrevDay   | Return the abbreviation name of the day              |  x  |     |
+|nameDay     | Return the of the day                                |  x  |     |
+|abbrevMonth | Return the abbreviation name of the Month            |  x  |     |
+|abbrevDay   | Return the abbreviation name of the day              |  x  |     |
 
 ## Avancement
 
 -2025-01-16 06:30 start projet date-time </br></br>
+
 -2025-01-16 15:01 add function switchMonths </br></br>
+
+-2025-01-30 04:47 Formatting @panic and modifying isBad() deleting assert() </br></br>
+
+-2025-02-25 20:08 Complete overhaul of the DATE model </br></br>
+
+-2025-02-25 20:08 Dynamic timezone set-up  </br></br>
+
+-2025-02-25 20:08 Automatic creation of timezone.zig source code, via the module: Creat_timezones  </br></br>
+
+-2025-02-25 20:08 LMDB database creation  </br></br>
+
+-2025-02-25 20:08 module timeoffset  </br></br>
 
