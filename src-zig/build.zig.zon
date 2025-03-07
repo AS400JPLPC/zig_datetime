@@ -1,7 +1,8 @@
 .{
-    .name = "program",
+    .name = .as400jplpc,
     .version = "0.0.0",
-    .dependencies = .{
+    .minimum_zig_version = "0.14.0",
+        .dependencies = .{
         .liblmdb = .{
             .path = "../liblmdb",
         },
@@ -12,7 +13,6 @@
             .path = "../libdate",
         },
     },
-    .paths = .{
-        "",
-    },
+    .paths = .{"",},
+    .fingerprint = 0xbbebb3706425d0a9,
 }

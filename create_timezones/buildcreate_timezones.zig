@@ -17,13 +17,15 @@ pub fn build(b: *std.Build) void {
     // Building the executable
     const Prog = b.addExecutable(.{
     .name = "create_timezones",
-    .root_source_file =  b.path("./create_timezones.zig" ),
-    .target = target,
-    .optimize = optimize,
+    .root_module = b.createModule(.{
+	    .root_source_file =  b.path("./create_timezones.zig" ),
+	    .target = target,
+	    .optimize = optimize,
+    }),
     });
 
     b.installArtifact(Prog);
-
+    
 	const run_exe = b.addRunArtifact(Prog);
 
     const run_step = b.step("run", "Run the application");

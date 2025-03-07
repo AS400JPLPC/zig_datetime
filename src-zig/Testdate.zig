@@ -184,6 +184,9 @@ std.debug.print("shiftDays ad 20 day : {s}\n",.{datm.string(allocator)});
 _= Dte.yearsMore(&datm,20);
 std.debug.print("shiftYears ad 20 Year : {s}\n",.{datm.string(allocator)});
 
+
+datm = try Dte.create(2025, 3, 1);
+std.debug.print("create(2025, 3, 1) : {s}\n",.{datm.string(allocator)});
 std.debug.print("isWeekend: {}\n",.{datm.isWeekend()});
 std.debug.print("dayOfYear: {d}\n",.{datm.quantieme()});
 std.debug.print("getWeek: {d}\n",.{datm.getWeek()});

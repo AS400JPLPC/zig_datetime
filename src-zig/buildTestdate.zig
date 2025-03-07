@@ -7,7 +7,6 @@ pub fn build(b: *std.Build) void {
 	const optimize = b.standardOptimizeOption(.{});
  
     // zig-src            source projet
-    // zig-src/deps       curs/ form / outils ....
     // src_c              source c/c++
 
 
@@ -19,9 +18,11 @@ pub fn build(b: *std.Build) void {
     // Building the executable
     const Prog = b.addExecutable(.{
     .name = "Testdate",
-    .root_source_file =  b.path( "./Testdate.zig" ),
-    .target = target,
-    .optimize = optimize,
+    .root_module = b.createModule(.{
+	    .root_source_file =  b.path( "./Testdate.zig" ),
+	    .target = target,
+	    .optimize = optimize,
+    }),
     });
 
     Prog.root_module.addImport("datetime", zenlib_date.module("datetime"));
