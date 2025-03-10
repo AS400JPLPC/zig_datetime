@@ -27,7 +27,7 @@ thank
 
 ```zig
 
-pub const Dte = @import("datetime").Date;i  // work date Y M D
+pub const Dte = @import("datetime").Date;  // work date Y M D
 
 pub const Dtm = @import("datetime").DTime;  // UTC chronolog
 
@@ -65,7 +65,6 @@ In SQL, there are two ways of handling dates:</br>
 The date becomes invalid, for example when a record is “deinit”. </br>
 Dte.DATE.dateOff(&dfacture), becomes “0000-00-00” its status changes to false.</br>
 </br>
-Use isValid() ;</br>
 </br>
 Normally, if you don't fiddle with the date apart from retrieving twisted text,</br>
 there'll be no error, catch unreachable instead of try</br>
