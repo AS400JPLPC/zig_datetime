@@ -304,7 +304,7 @@ pub const DATE = struct {
         if (day < 1 or day > daysInMonth(year, month)) return error.InvalidDate;
         // Since we just validated the ranges we can now savely cast
 
-        var datx =  DATE{
+        var dat_x =  DATE{
             .year = @intCast(year),
             .month = @intCast(month),
             .day = @intCast(day),
@@ -313,12 +313,12 @@ pub const DATE = struct {
             .status = true,
             };
                         
-            datx.weekday = @intCast(dayNum(datx));
-            datx.week = @intCast(searchWeek(datx));
+            dat_x.weekday = @intCast(dayNum(dat_x));
+            dat_x.week = @intCast(searchWeek(dat_x));
 
             
 
-            return datx;
+            return dat_x;
     }
 
     // Do not set to zeros for consistency with function set.
@@ -333,25 +333,35 @@ pub const DATE = struct {
     }
 
     // Consistency test of the date
-    fn isBad(self:DATE) void {
+    fn isBad(self: DATE) bool {
         var status :bool = true;
         if (self.year < MIN_YEAR or self.year > MAX_YEAR) status = false;
         if (self.month < 1 or self.month > 12) status = false;
         if (self.day < 1 or self.day > daysInMonth(self.year, self.month)) status = false;
-        if (!self.status or  !status ) {
+        if (!self.status or  !status ) return false;
+        return true;
+     }
+    fn isBadx(self: *DATE) bool {
+        var status :bool = true;
+        if (self.year < MIN_YEAR or self.year > MAX_YEAR) status = false;
+        if (self.month < 1 or self.month > 12) status = false;
+        if (self.day < 1 or self.day > daysInMonth(self.year, self.month)) status = false;
+        if (!self.status or  !status ) return false;
+        return true;
+     }
+
+    // Return a copy of the date
+    pub fn copy(self: DATE) !DATE {
+        if (!isBad(self)) {
 			const s = @src();
             @panic( std.fmt.allocPrint(allocDT,
             "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
             ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
             	catch unreachable);
         }
-     }
-
-
-    // Return a copy of the date
-    pub fn copy(self: DATE) !DATE {
-        isBad(self);
-        return DATE.create(self.year, self.month, self.day);
+        var ctrl : DATE = undefined;
+        ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
+        return ctrl;
     }
 
  
@@ -431,12 +441,24 @@ pub const DATE = struct {
     // Comparisons
     // ------------------------------------------------------------------------
     pub fn eql(self: DATE, other: DATE) bool {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return self.cmp(other) == .eq;
     }
 
     pub fn cmp(self: DATE, other: DATE) Order {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         if (self.year > other.year) return .gt;
         if (self.year < other.year) return .lt;
         if (self.month > other.month) return .gt;
@@ -447,23 +469,44 @@ pub const DATE = struct {
     }
 
     pub fn gt(self: DATE, other: DATE) bool {
-        isBad(self);
-        return self.cmp(other) == .gt;
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }        return self.cmp(other) == .gt;
     }
 
     pub fn gte(self: DATE, other: DATE) bool {
-        isBad(self);
-        const r = self.cmp(other);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }        const r = self.cmp(other);
         return r == .eq or r == .gt;
     }
 
     pub fn lt(self: DATE, other: DATE) bool {
-        isBad(self);
-        return self.cmp(other) == .lt;
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }        return self.cmp(other) == .lt;
     }
 
     pub fn lte(self: DATE, other: DATE) bool {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         const r = self.cmp(other);
         return r == .eq or r == .lt;
     }
@@ -505,7 +548,13 @@ pub const DATE = struct {
     // Return date in ISO format YYYY-MM-DD
     const ISO_DATE_FMT = "{:0>4}-{:0>2}-{:0>2}";
     pub fn string(self: DATE, allocator: AllocDate) []const u8 {
-        isBad(self);
+        if (!isBad(self)) {
+            const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return std.fmt.allocPrint(allocator, ISO_DATE_FMT,
             .{ self.year, self.month, self.day }) catch unreachable;
     }
@@ -513,7 +562,13 @@ pub const DATE = struct {
    // Return date in FR format DD/MM/YYYY
     const FR_DATE_FMT = "{:0>2}/{:0>2}/{:0>4}";
     pub fn stringFR(self: DATE, allocator: AllocDate) []const u8 {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return std.fmt.allocPrint(allocator, FR_DATE_FMT,
             .{ self.day, self.month, self.year }) catch unreachable;
     }
@@ -521,7 +576,13 @@ pub const DATE = struct {
    // Return date in FR format MM/DD/YYYY
     const US_DATE_FMT = "{:0>2}/{:0>2}/{:0>4}";
     pub fn stringUS(self: DATE, allocator: AllocDate) []const u8 {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return std.fmt.allocPrint(allocator, US_DATE_FMT,
             .{ self.month, self.day, self.year }) catch unreachable;
     }
@@ -533,15 +594,15 @@ pub const DATE = struct {
 
     // Return day of week starting with Monday = 1 and Sunday = 7
 
-    pub fn getYear(self:DATE) u16 {isBad(self); return self.year;}
+    pub fn getYear(self:DATE) u16 {return self.year;}
 
-    pub fn getMonth(self:DATE) u4 {isBad(self); return self.month;}
+    pub fn getMonth(self:DATE) u4 {return self.month;}
 
-    pub fn getDay(self:DATE) u8 {isBad(self); return self.day;}
+    pub fn getDay(self:DATE) u8 {return self.day;}
 
-    pub fn getWeek(self:DATE) u6 {isBad(self); return self.week;}
+    pub fn getWeek(self:DATE) u6 {return self.week;}
 
-    pub fn getWeekDay(self:DATE) u3 {isBad(self); return self.weekday;}
+    pub fn getWeekDay(self:DATE) u3 {return self.weekday;}
 
     pub fn restOfdays(self:DATE) usize {
         const nday  = quantieme(self);
@@ -550,12 +611,10 @@ pub const DATE = struct {
     
     // Return whether the date is a weekend (Saturday or Sunday)
     pub fn isWeekend(self: DATE) bool {
-        isBad(self);
         return self.dayNum() >= 6;
     }
 
     pub fn isLeapYear(self :DATE) bool {
-        
         return (self.year % 4 == 0 and self.year % 100 != 0) or (self.year % 400 == 0);
     }
 
@@ -580,7 +639,13 @@ pub const DATE = struct {
     pub fn daysMore(self: *DATE, days: u32) bool {
             var ctrl : DATE = undefined;
             ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
-            isBad(ctrl);
+            if (!isBadx(self)) {
+    			const s = @src();
+                @panic( std.fmt.allocPrint(allocDT,
+                "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+                ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+                	catch unreachable);
+            }
             var ord : u32 = toOrdinal(ctrl) ;
             ord += days;
             if ( ord > MAX_ORDINAL ) return false;
@@ -595,26 +660,39 @@ pub const DATE = struct {
 
     // Move back x days
     pub fn daysLess(self: *DATE, days: u32) bool {
-            var ctrl : DATE = undefined;
-            ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
-            isBad(ctrl);
-            const ord = toOrdinal(ctrl);
-            if ( ord - days < 0 ) return false;
-            ctrl = fromOrdinal( ord - days);
-            
-            self.year = ctrl.year;  self.month = ctrl.month; self.day = ctrl.day;
-            self.weekday = ctrl.weekday; self.week = ctrl.week;
+        if (!isBadx(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
+        var ctrl : DATE = undefined;
+        ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
+        const ord = toOrdinal(ctrl);
+        if ( ord - days < 0 ) return false;
+        ctrl = fromOrdinal( ord - days);
+        
+        self.year = ctrl.year;  self.month = ctrl.month; self.day = ctrl.day;
+        self.weekday = ctrl.weekday; self.week = ctrl.week;
 
-            return true;
+        return true;
     }
 
 
     // Advance of x YEAR
     pub fn yearsMore(self: *DATE, year: u32) bool {
+        if (!isBadx(self)) {
+    			const s = @src();
+                @panic( std.fmt.allocPrint(allocDT,
+                "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+                ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+                	catch unreachable);
+        }
+        if ( self.year + year > 9999 or year  ==  0) return false;
+        
         var ctrl : DATE = undefined;
         ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
-        isBad(ctrl);
-        if ( self.year + year > 9999 or year  ==  0) return false;
         var n : usize = 0 ;
         while( n < year) :( n += 1){
             var ord = toOrdinal(ctrl);
@@ -629,11 +707,17 @@ pub const DATE = struct {
 
     // Move back x YEAR
     pub fn yearsLess(self: *DATE, year: u32) bool {
+        if (!isBadx(self)) {
+    			const s = @src();
+                @panic( std.fmt.allocPrint(allocDT,
+                "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+                ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+                	catch unreachable);
+        }
+        if ( self.year == year or year > self.year ) return false;
+        
         var ctrl : DATE = undefined;
         ctrl.year = self.year; ctrl.month = self.month; ctrl.day = self.day; ctrl.status = self.status;
-        isBad(ctrl);
-        if ( self.year == year or year > self.year ) return false;
-
         var n : usize = year ;
         while( n > 0) :( n -= 1){
             var ord = toOrdinal(ctrl);
@@ -648,6 +732,15 @@ pub const DATE = struct {
 
     // Returns the day number in the year  Quantieme
     pub fn quantieme(self: DATE) usize {
+        if ( (self.year < MIN_YEAR or self.year > MAX_YEAR) or
+             (self.month < 1 or self.month > 12) or
+             (self.day < 1 or self.day > daysInMonth(self.year, self.month)) ) {
+                 const s = @src();
+                @panic( std.fmt.allocPrint(allocDT,
+                "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+                ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+                	catch unreachable);
+        }
         const days_per_month = [_]usize{ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
         var numdays: usize = self.day; // Commence avec le jour du mois
@@ -867,14 +960,26 @@ pub const DATE = struct {
     // Return date extended
     const DATE_FMT_EXT= "{s} {:0>2} {s} {:0>4}";
     pub fn dateExt(self: DATE, allocator: AllocDate, lng: Idiom) []u8 {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return std.fmt.allocPrint(allocator, DATE_FMT_EXT,
             .{ Idiom.nameDay(self.weekday,lng), self.day,Idiom.nameMonth(self.month,lng), self.year }) catch unreachable;
     }
 
     const DATE_FMT_ABR= "{s}. {:0>2} {s}. {:0>4}";
     pub fn dateAbr(self: DATE, allocator: AllocDate, lng: Idiom) []u8 {
-        isBad(self);
+        if (!isBad(self)) {
+			const s = @src();
+            @panic( std.fmt.allocPrint(allocDT,
+            "\n\n\r file:{s} line:{d} column:{d} func:{s} out-of-service  err:{} >>{d}-{d}-{d}\n\r"
+            ,.{s.file, s.line, s.column,s.fn_name,Error.Failed_zone, self.year, self.month, self.day})
+            	catch unreachable);
+        }
         return std.fmt.allocPrint(allocator, DATE_FMT_ABR,
             .{ Idiom.abbrevDay(self.weekday,lng), self.day, Idiom.abbrevMonth(self.month,lng), self.year }) catch unreachable;
     }
