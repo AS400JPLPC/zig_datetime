@@ -24,10 +24,10 @@ pub fn writeTimezone() void {
 
     const user = std.posix.getenv("USER") orelse "INITTIMEZONE";
 
-    const fileTZ = std.fmt.allocPrintZ(allocTZ,"/tmp/{s}{d}.txt" ,.{user,timesStamp_ms})  catch unreachable;
+    const fileTZ = std.fmt.allocPrint(allocTZ,"/tmp/{s}{d}.txt" ,.{user,timesStamp_ms})  catch unreachable;
     defer allocTZ.free(fileTZ);
     
-    const batch = std.fmt.allocPrintZ(allocTZ,"/tmp/{s}{d}.sh" ,.{user,timesStamp_ms})  catch unreachable;
+    const batch = std.fmt.allocPrint(allocTZ,"/tmp/{s}{d}.sh" ,.{user,timesStamp_ms})  catch unreachable;
     defer allocTZ.free(batch);
 
     const file = std.fs.cwd().createFile(batch, .{.read = true, .truncate = true,.exclusive = false, })

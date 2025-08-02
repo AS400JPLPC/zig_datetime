@@ -7,12 +7,34 @@ pub const Dtm = @import("datetime").DTIME;
 pub const Tmz = @import("timezones");
 pub const Idm = @import("datetime").DATE.Idiom;
 
-const stdout = std.io.getStdOut().writer();
-const stdin = std.io.getStdIn().reader();
+
+//============================================================================================
+var stdin = std.fs.File.stdin();
+var stdout = std.fs.File.stdout().writerStreaming(&.{});
+
+
+inline fn Print( comptime format: []const u8, args: anytype) void {
+    stdout.interface.print(format, args) catch  {} ;
+}
+inline fn WriteAll( args: anytype) void {
+    stdout.interface.writeAll(args) catch {} ;
+}
+
+fn Pause(msg : [] const u8 ) void{
+
+    Print("\nPause  {s}\r\n",.{msg});
+    var buf: [16]u8 = undefined;
+    var c  : usize = 0;
+    while (c == 0) {
+        c = stdin.read(&buf) catch unreachable;
+    }
+}
+//============================================================================================
+
 
 pub fn main () ! void {
-stdout.writeAll("\x1b[2J") catch {};
-stdout.writeAll("\x1b[3J") catch {};
+WriteAll("\x1b[2J");
+WriteAll("\x1b[3J");
 
 
 
@@ -22,82 +44,77 @@ stdout.writeAll("\x1b[3J") catch {};
 
 
 const c = Dtm.nowUTC() ;
-std.debug.print("chronolog: {d} {d} {d} {d} {d} {d} {d}\n",
+Print("chronolog: {d} {d} {d} {d} {d} {d} {d}\n",
      .{c.year,c.month,c.day,c.hour,c.minute,c.second,c.nanosecond});
-std.debug.print("chrono UTC : {s}\n",.{c.stringTime()});
-std.debug.print("Chrono NUM : {d}\n",.{c.numTime()});
+Print("chrono UTC : {s}\n",.{c.stringTime()});
+Print("Chrono NUM : {d}\n",.{c.numTime()});
 
 var d = Dtm.nowTime(Tmz.Europe.Paris) ;
-std.debug.print("chronolog: {d} {d} {d} {d} {d} {d} {d}\n",
+Print("chronolog: {d} {d} {d} {d} {d} {d} {d}\n",
      .{d.year,d.month,d.day,d.hour,d.minute,d.second,d.nanosecond});
-std.debug.print("Chrono Europe.Paris : {s}\n",.{d.stringTime()});
-std.debug.print("Chrono NUM Europe.Paris : {d}\n",.{d.numTime()});
+Print("Chrono Europe.Paris : {s}\n",.{d.stringTime()});
+Print("Chrono NUM Europe.Paris : {d}\n",.{d.numTime()});
 
-std.debug.print("timestamp timezone included of datetime {d}\n",.{d.Timestamp()});
+Print("timestamp timezone included of datetime {d}\n",.{d.Timestamp()});
 
 
 d = Dtm.nowTime(Tmz.Europe.Paris) ;
-std.debug.print("Chrono Europe.Paris : {s}\n",.{d.stringTime()});
+Print("Chrono Europe.Paris : {s}\n",.{d.stringTime()});
 
 // pub const Detroit = create("America/Detroit", -300);
 d = Dtm.nowTime(Tmz.America.Detroit) ;
-std.debug.print("Chrono America.Detroit : {s}\n",.{d.stringTime()});
+Print("Chrono America.Detroit : {s}\n",.{d.stringTime()});
 
 // pub const Los_Angeles = create("America/Los_Angeles", -480);
 d = Dtm.nowTime(Tmz.America.Los_Angeles) ;
-std.debug.print("Chrono America.Los_Angeles : {s}\n",.{d.stringTime()});
+Print("Chrono America.Los_Angeles : {s}\n",.{d.stringTime()});
 
 // pub const Seoul = create("Asia/Seoul", 540);
 d = Dtm.nowTime(Tmz.Asia.Seoul) ;
-std.debug.print("Chrono Asia.Seoul : {s}\n",.{d.stringTime()});
+Print("Chrono Asia.Seoul : {s}\n",.{d.stringTime()});
 
 
 // pub const Tel_Aviv = create("Asia/Tel_Aviv", 120);
 d = Dtm.nowTime(Tmz.Asia.Tel_Aviv) ;
-std.debug.print("Chrono Asia.Tel_Aviv : {s}\n",.{d.stringTime()});
+Print("Chrono Asia.Tel_Aviv : {s}\n",.{d.stringTime()});
 
 // pub const Melbourne = create("Australia/Melbourne", 600);
 d = Dtm.nowTime(Tmz.Australia.Melbourne) ;
-std.debug.print("Chrono Australia.Melbourne : {s}\n",.{d.stringTime()});
+Print("Chrono Australia.Melbourne : {s}\n",.{d.stringTime()});
 
 // pub const Atlantic = create("Canada/Atlantic", -240);
 d = Dtm.nowTime(Tmz.Canada.Atlantic) ;
-std.debug.print("Chrono Canada.Atlantic : {s}\n",.{d.stringTime()});
+Print("Chrono Canada.Atlantic : {s}\n",.{d.stringTime()});
 
 // pub const Sofia = create("Europe/Sofia", 120);
 d = Dtm.nowTime(Tmz.Europe.Sofia) ;
-std.debug.print("Chrono Europe.Sofia : {s}\n",.{d.stringTime()});
+Print("Chrono Europe.Sofia : {s}\n",.{d.stringTime()});
 
 
 // pub const Japan = create("Japan", 540);
 d = Dtm.nowTime(Tmz.Japan) ;
-std.debug.print("Chrono Japan : {s}\n",.{d.stringTime()});
+Print("Chrono Japan : {s}\n",.{d.stringTime()});
 
 // pub const Apia = create("Pacific/Apia", 780);
 d = Dtm.nowTime(Tmz.Pacific.Apia) ;
-std.debug.print("Chrono Pacific.Apia : {s}\n",.{d.stringTime()});
+Print("Chrono Pacific.Apia : {s}\n",.{d.stringTime()});
 
 
 // pub const Pacific = create("US/Pacific", -480);
 d = Dtm.nowTime(Tmz.US.Pacific) ;
-std.debug.print("Chrono US.Pacific : {s}\n",.{d.stringTime()});
+Print("Chrono US.Pacific : {s}\n",.{d.stringTime()});
 
 // date timezone
 var ed = Dte.nowDate(Tmz.Europe.Paris) ;
-std.debug.print("date Europe.Paris : {s}\n",.{ed.string()});
+Print("date Europe.Paris : {s}\n",.{ed.string()});
 
 ed = Dte.nowDate(Tmz.US.Pacific) ;
-std.debug.print("date US.Pacific : {s}\n",.{ed.string()});
+Print("date US.Pacific : {s}\n",.{ed.string()});
 
 Dtm.deinitAlloc();
 Dte.deinitAlloc();
-pause("stop");
+Pause("stop");
 
-}
-fn pause(text : [] const u8) void {
-    std.debug.print("{s}\n",.{text});
-   	var buf : [3]u8  =	[_]u8{0} ** 3;
-	_= stdin.readUntilDelimiterOrEof(buf[0..], '\n') catch unreachable;
 
 }
 
