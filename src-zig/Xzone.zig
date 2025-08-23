@@ -3,24 +3,65 @@ const lmdb = @import("lmdb");
 
 const allocTZ = std.heap.page_allocator;
 
+
+
+//============================================================================================
+var stdin = std.fs.File.stdin();
+var stdout = std.fs.File.stdout().writerStreaming(&.{});
+
+
+inline fn Print( comptime format: []const u8, args: anytype) void {
+    stdout.interface.print(format, args) catch  {} ;
+}
+inline fn WriteAll( args: anytype) void {
+    stdout.interface.writeAll(args) catch {} ;
+}
+
+fn Pause(msg : [] const u8 ) void{
+
+    Print("\nPause  {s}\r\n",.{msg});
+    var buf: [16]u8 = undefined;
+    var c  : usize = 0;
+    while (c == 0) {
+        c = stdin.read(&buf) catch unreachable;
+    }
+}
+//============================================================================================
+
+
+
+// var def : lmdb.defDir = undefined;
+
 var env : lmdb.Environment = undefined;
 var db  : lmdb.Database = undefined;
 var tr : lmdb.Transaction = undefined; 
 var cursor : lmdb.Cursor = undefined;
 
 var tbl_key = std.ArrayList([] const u8).initCapacity(allocTZ,0) catch unreachable;
-
 var tbl_offset =  std.ArrayList(i32).initCapacity(allocTZ,0) catch unreachable;
 
+const lib_file ="/tmp/Timezone/data.mdb";
 
 const lib = "/tmp/Timezone";
+pub fn main() !void {
+    WriteAll("\x1b[2J") ;
+    WriteAll("\x1b[3J") ;
+
+    if (!lmdb.isFile(lib_file)) writeTimezone();
+    Print("\n{d}\n",.{readTimezone("Europe/Paris")});
+
+
+
+Pause("stop");
+}
+
 
 
 
 //--------------------------------
 // International timezone recovery
 //--------------------------------
-pub fn writeTimezone() void {
+pub fn writeTimezone() void{
 
     const timesStamp_ms :i64 = @bitCast(std.time.milliTimestamp());
 
@@ -98,7 +139,7 @@ pub fn writeTimezone() void {
     // Finally, we put some data
     var idx : usize = 0;
     while( idx < tbl_key.items.len)  {
-// std.debug.print("{s}  {d}\n",.{tbl_key.items[idx],tbl_offset.items[idx]});
+//  Print("{s}  {d}\n",.{tbl_key.items[idx],tbl_offset.items[idx]});
         BaseTR.putInt32(tbl_key.items[idx], tbl_offset.items[idx])  catch unreachable;
         idx += 1;
     }
@@ -212,9 +253,10 @@ fn readFileTZ( fbatch :[]const u8)  void {
 
     var lmdbkey :[] const u8 = undefined;
     var lmdboffset  :[] const u8 = undefined;
+    var sign    : i32 = 0;
     var hours   : i32 = 0;
     var minutes : i32 = 0;
-    var totalminutes  : i32 = 0;
+    var totalminutes : i32 = 0;
     // traitement de la commande timedatectl
     var lines = std.mem.splitAny(u8, buffer, "\n");
     while (lines.next()) |line | {
@@ -226,15 +268,17 @@ fn readFileTZ( fbatch :[]const u8)  void {
         lmdboffset = parts.next() .? ;
         hours = 0;
         minutes = 0;
-        totalminutes = 0;
-        const sign: i32 = if(lmdboffset[0] == '-') -1 else 1;
+        sign = 0;
+        if (lmdboffset[0] == '-') sign = -1 else sign = 1;
         hours = std.fmt.parseInt(i32, lmdboffset[1..3], 10) catch unreachable;
         minutes = std.fmt.parseInt(i32, lmdboffset[3..5], 10) catch unreachable;
         totalminutes  = (hours * 60 + minutes) * sign;
+        // result = totalminute ;     
+         Print("{s:>32} {s:>5} {d:>5} h:{d} m:{d}  \n",.{lmdbkey,lmdboffset,totalminutes, hours, minutes });
 
         tbl_key.append(allocTZ,lmdbkey) catch unreachable;
-        tbl_offset.append(allocTZ,totalminutes ) catch unreachable;
-
+        tbl_offset.append(allocTZ,totalminutes) catch unreachable;
+        totalminutes=0;
     }
-
+ 
 }

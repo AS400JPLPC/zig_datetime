@@ -1,4 +1,4 @@
-**attention I use the night version 0.15.dev incompatible with 0.14.1**
+**attention I use the night version 0.15.1 incompatible with 0.14.1**
 
 
 # Zig Datetime
@@ -199,5 +199,7 @@ searchWeek” is a function that determines the number of weeks, the last week a
 -2025-03-14 16:10 module timeoffsetAdd arena-allocator , standardization with string and decimal  <br/>
 
 
- @panic  <br/>
+ @panic  <br/>  
+  
+-2025-08.22  02:10  update zig 0.15.1
 

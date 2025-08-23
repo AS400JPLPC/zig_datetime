@@ -156,7 +156,7 @@ if (!datxm.status) std.debug.print("{}\n",.{null});
 Print("datm null {d} {d}  {d} \n",.{datxm.year, datxm.month, datxm.day});
 Print("===============================\n",.{});
 
-
+Dte.deinitDate();
 // test fou  Idiot test
 var datm = try Dte.create(1951, 10, 12);
 Print("create(1951, 10, 12) : {s}\n",.{datm.string()});
@@ -230,7 +230,7 @@ Print("dayNum : {d}\n",.{datm.getWeekDay()});
 
 Print("isoCalendar:{d} {d} {d}\n",.{
     datm.year, datm.week , datm.weekday });
-Dte.deinitAlloc();
+Dtm.deinitDtime();
 datm= try Dte.parseISO(datm.string());
 Print("ISO {d} {d} {d}\n",.{datm.getYear(),datm.getMonth(),datm.getDay()});
 

@@ -33,23 +33,23 @@ pub fn main() !void {
 
 
     // Construire le script Bash ligne par ligne
-    var lines = std.ArrayList([]const u8).init(allocTZ);
-    defer lines.deinit();
+    var lines = std.ArrayList([]const u8).initCapacity(allocTZ,0) catch unreachable;
+    defer lines.deinit(allocTZ);
 
-    try lines.append("#!/bin/bash");
-    try lines.append("# Show date and time in other time zones");
-    try lines.append("zoneinfo=/usr/share/zoneinfo/");
-    try lines.append("if command -v timedatectl >/dev/null; then");
-    try lines.append("    tzlist=$(timedatectl list-timezones)");
-    try lines.append("fi \n");
-    try lines.append("line=\"\" \n");
-    try lines.append("grep -i \"$search\" <<< \"$tzlist\" | while read z");
-    try lines.append("do \n");
-    try lines.append("    printf -v line \"%-32s%s\" \"$z\" \"|\"");
-    try lines.append(std.fmt.allocPrint(allocTZ, "    echo \"$line\" >> {s}", .{fileTZ}) catch unreachable);
-    try lines.append("done");
-    try lines.append(std.fmt.allocPrint(allocTZ, "echo \"END\" >> {s}", .{fileTZ}) catch unreachable );
-    try lines.append("exit 0");
+    try lines.append(allocTZ,"#!/bin/bash");
+    try lines.append(allocTZ,"# Show date and time in other time zones");
+    try lines.append(allocTZ,"zoneinfo=/usr/share/zoneinfo/");
+    try lines.append(allocTZ,"if command -v timedatectl >/dev/null; then");
+    try lines.append(allocTZ,"    tzlist=$(timedatectl list-timezones)");
+    try lines.append(allocTZ,"fi \n");
+    try lines.append(allocTZ,"line=\"\" \n");
+    try lines.append(allocTZ,"grep -i \"$search\" <<< \"$tzlist\" | while read z");
+    try lines.append(allocTZ,"do \n");
+    try lines.append(allocTZ,"    printf -v line \"%-32s%s\" \"$z\" \"|\"");
+    try lines.append(allocTZ,std.fmt.allocPrint(allocTZ, "    echo \"$line\" >> {s}", .{fileTZ}) catch unreachable);
+    try lines.append(allocTZ,"done");
+    try lines.append(allocTZ,std.fmt.allocPrint(allocTZ, "echo \"END\" >> {s}", .{fileTZ}) catch unreachable );
+    try lines.append(allocTZ,"exit 0");
 
     // ecriture du code source batch
     for (lines.items) |line| {
@@ -130,8 +130,8 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
     // traitement de la commande timedatectl
 
 	// Parser la sortie
-    var array_tmzones = std.ArrayList(Timezone).init(allocTZ);
-    defer array_tmzones.deinit();
+    var array_tmzones = std.ArrayList(Timezone).initCapacity(allocTZ,0) catch unreachable;
+    defer array_tmzones.deinit(allocTZ);
 
     var group : [] const u8 = undefined;
     var group2 : [] const u8 = undefined;
@@ -185,29 +185,29 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
         // std.debug.print(" Groupe: {s:<10} subGroup: {s:<15}  city: {s:<15} key:{s:<32}\n",
         //     .{tmzone.group,tmzone.subgroup,tmzone.city,tmzone.key});
 
-        try array_tmzones.append(tmzone);
+        try array_tmzones.append(allocTZ,tmzone);
 
         
     }
 
-    var src_lines = std.ArrayList([]const u8).init(allocTZ);
-    defer src_lines.deinit();
-    try src_lines.append("const std = @import(\"std\"); \n\n");
+    var src_lines = std.ArrayList([]const u8).initCapacity(allocTZ,0) catch unreachable;
+    defer src_lines.deinit(allocTZ);
+    try src_lines.append(allocTZ,"const std = @import(\"std\"); \n\n");
 
-    try src_lines.append("pub const Timezone = struct {");
-    try src_lines.append("\tid: []const u8");
-    try src_lines.append("};");
-    try src_lines.append("\n\n");
+    try src_lines.append(allocTZ,"pub const Timezone = struct {");
+    try src_lines.append(allocTZ,"\tid: []const u8");
+    try src_lines.append(allocTZ,"};");
+    try src_lines.append(allocTZ,"\n\n");
     
-    try src_lines.append("// Auto register timezones");
-    try src_lines.append("fn create(key: []const u8) Timezone {");
-    try src_lines.append("\tconst self = Timezone{ .id = key };");
-    try src_lines.append("\treturn self;");
-    try src_lines.append("}");
-    try src_lines.append("\n");
+    try src_lines.append(allocTZ,"// Auto register timezones");
+    try src_lines.append(allocTZ,"fn create(key: []const u8) Timezone {");
+    try src_lines.append(allocTZ,"\tconst self = Timezone{ .id = key };");
+    try src_lines.append(allocTZ,"\treturn self;");
+    try src_lines.append(allocTZ,"}");
+    try src_lines.append(allocTZ,"\n");
 
 
-     try src_lines.append("// Timezones");
+     try src_lines.append(allocTZ,"// Timezones");
     var index:usize = 1;
     var index_S:usize = 0;  // sous groupe
  // groupe "base"
@@ -221,11 +221,11 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
         //------------------------------------------------------------------------------------
         // enregistrement sour timezone.zig
         if( !std.mem.eql(u8,subgroup,tzone.subgroup) and index_S == 2 )
-              { try src_lines.append("\t\t};"); subgroup = ""; index_S = 0;} 
+              { try src_lines.append(allocTZ,"\t\t};"); subgroup = ""; index_S = 0;} 
 
       
         if( !std.mem.eql(u8,group,tzone.group) and index == 2 )
-              { try src_lines.append("};"); group = tzone.group; index = 1;} 
+              { try src_lines.append(allocTZ,"};"); group = tzone.group; index = 1;} 
 
         if( !std.mem.eql(u8,group,tzone.group) and index == 3 )
               { group = tzone.group; index = 1;} 
@@ -233,7 +233,7 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
         if ( std.mem.eql(u8, tzone.group, "base")){
             const lkey = std.fmt.allocPrint(allocTZ,
                 "pub const {s} = create(\"{s}\");",.{tzone.city,tzone.key}) catch unreachable;
-            try src_lines.append(lkey);
+            try src_lines.append(allocTZ,lkey);
             group = tzone.group;
             index = 3;            
             continue;
@@ -242,14 +242,14 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
         if ( index == 1 ){
             const lgroup = std.fmt.allocPrint(allocTZ, "pub const {s} = struct {s}",
                 .{tzone.group,"{"}) catch unreachable;
-            try src_lines.append(lgroup);
+            try src_lines.append(allocTZ,lgroup);
             index = 2;
         }
 
         if ( !std.mem.eql(u8,tzone.subgroup , "") and index_S == 0) {
             const sgroup = std.fmt.allocPrint(allocTZ, "\t\tpub const {s} = struct {s}",
                 .{tzone.subgroup,"{"}) catch unreachable;
-            try src_lines.append(sgroup);
+            try src_lines.append(allocTZ,sgroup);
             subgroup = tzone.subgroup;
             index_S = 2;
         }
@@ -257,12 +257,12 @@ fn readFileTZ( file_TZ :[]const u8) ! void {
         if (index == 2 and index_S == 0){
             const lcity = std.fmt.allocPrint(allocTZ,
                 "\tpub const {s} = create(\"{s}\");",.{tzone.city,tzone.key}) catch unreachable;
-            try src_lines.append(lcity);
+            try src_lines.append(allocTZ,lcity);
         }
             if (index == 2 and index_S > 0){
             const lcity = std.fmt.allocPrint(allocTZ,
                 "\t\t\tpub const {s} = create(\"{s}\");",.{tzone.city,tzone.key}) catch unreachable;
-            try src_lines.append(lcity);
+            try src_lines.append(allocTZ,lcity);
         }
     } 
 

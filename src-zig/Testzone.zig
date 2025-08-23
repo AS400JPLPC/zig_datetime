@@ -111,8 +111,8 @@ Print("date Europe.Paris : {s}\n",.{ed.string()});
 ed = Dte.nowDate(Tmz.US.Pacific) ;
 Print("date US.Pacific : {s}\n",.{ed.string()});
 
-Dtm.deinitAlloc();
-Dte.deinitAlloc();
+Dtm.deinitDtime();
+Dte.deinitDate();
 Pause("stop");
 
 
