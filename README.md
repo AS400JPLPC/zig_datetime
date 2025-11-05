@@ -203,3 +203,8 @@ searchWeek” is a function that determines the number of weeks, the last week a
   
 -2025-08.22  02:10  update zig 0.15.1
 
+<br/>  
+  
+-2025-11.05  17:09  update zig 0.16.dev remove std.time.nanoTimestamp()
+
+
