@@ -1,4 +1,4 @@
-**attention I use the night version 0.15.1 incompatible with 0.14.1**
+**attention I use the night version *
 
 
 # Zig Datetime
