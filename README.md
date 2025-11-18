@@ -207,5 +207,9 @@ searchWeek” is a function that determines the number of weeks, the last week a
   
 -2025-11.05  17:09  update zig 0.16.dev remove std.time.nanoTimestamp()<br/>  
   
--2025-11.06  13:36  Modification after a request for help in the Zig forum, more standard module retrieve nanoseconde <br/>  
+-2025-11.06  13:36  Modification after a request for help in the Zig forum, more standard module retrieve nanoseconde <br/>    
+<br/>
+-2025-11-18  17:00 regression  Regression back to version 15.2<br/>
+<br/>
+
 
